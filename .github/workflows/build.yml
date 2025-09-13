@@ -15,8 +15,12 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Install dependencies
+        run: pip install pyyaml
+
       - name: Generate redirect pages
         run: |
+          python3 - << 'EOF'
           import yaml, os
           from pathlib import Path
 
@@ -33,6 +37,7 @@ jobs:
               d.mkdir(parents=True, exist_ok=True)
               html = template.replace("{{slug}}", slug).replace("{{url}}", url)
               (d / "index.html").write_text(html, encoding="utf-8")
+          EOF
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
